@@ -7,10 +7,11 @@
 
     if (script && script.hasAttribute("data-main")) {
       var main = script.getAttribute("data-main");
-
-      require([ main ]);
+      return require([ main ]);
     }
   }
+
+  throw new Error("Not found [data-main] entry point");
 })((function() {
   var cache = {};
 
