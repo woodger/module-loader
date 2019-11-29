@@ -1,32 +1,32 @@
 (function(require) {
   window.require = require;
-  var scripts = document.getElementsByTagName("script");
+  var scripts = document.getElementsByTagName('script');
 
   for (var i = 0; i < scripts.length; i++) {
     var script = scripts.item(i);
 
-    if (script && script.hasAttribute("data-main")) {
-      var main = script.getAttribute("data-main");
+    if (script && script.hasAttribute('data-main')) {
+      var main = script.getAttribute('data-main');
       return require([ main ]);
     }
   }
 
-  throw new Error("Not found [data-main] entry point");
+  throw new Error('Not found [data-main] entry point');
 })((function() {
   var cache = {};
 
   var uploadScript = function (url, callback) {
-    if (cache.hasOwnProperty(url)) {
+    if (url in cache) {
       return callback(cache[url]);
     }
 
-    var script = document.createElement("script");
+    var script = document.createElement('script');
     var module = {};
     var exports = {};
 
-    var readymodule = new Event("readymodule");
+    var readymodule = new Event('readymodule');
 
-    Object.defineProperty(module, "exports", {
+    Object.defineProperty(module, 'exports', {
       set: function(value) {
         exports = value;
         script.dispatchEvent(readymodule);
@@ -39,19 +39,19 @@
     window.module = module;
 
     var listener = function(event) {
-      script.removeEventListener("readymodule", listener, false);
+      script.removeEventListener('readymodule', listener, false);
       callback(
         cache[url] = module
       );
     };
 
-    script.setAttribute("src", url);
-    script.addEventListener("readymodule", listener, false);
+    script.setAttribute('src', url);
+    script.addEventListener('readymodule', listener, false);
 
-    var head = document.getElementsByTagName("head").item(0);
+    var head = document.getElementsByTagName('head').item(0);
 
     if (!head) {
-      throw new Error("Expected to find a HEAD tag in document");
+      throw new Error('Expected to find a HEAD tag in document');
     }
 
     head.appendChild(script);
@@ -59,7 +59,7 @@
 
   var require = function(urls, callback) {
     if (urls instanceof Array === false) {
-      throw new Error("The first argument must be an array of URLs.");
+      throw new Error('The first argument must be an array of URLs.');
     }
 
     queue([], callback);
@@ -69,7 +69,7 @@
         buffer.push(module.exports);
 
         if (buffer.length === urls.length) {
-          if (typeof callback === "function") {
+          if (typeof callback === 'function') {
             callback(buffer);
           }
 

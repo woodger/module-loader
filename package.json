@@ -1,6 +1,6 @@
 {
   "name": "module-loader",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Simple and fast module loader for browser",
   "keywords": [
     "browser",
@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/woodger/module-loader"
+    "url": "https://github.com/woodger/module-loader.git"
   },
   "main": "require.js",
   "browserslist": [
@@ -25,5 +25,5 @@
     "opera 11.60",
     "and_chr 18",
     "and_ff 4"
-  ],
+  ]
 }
