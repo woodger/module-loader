@@ -1,0 +1,29 @@
+{
+  "name": "module-loader",
+  "version": "0.0.1",
+  "description": "Simple and fast module loader for browser",
+  "keywords": [
+    "browser",
+    "require",
+    "loader"
+  ],
+  "author": {
+    "name": "Stanislav Potemkin",
+    "email": "woodger@ya.ru"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/woodger/module-loader"
+  },
+  "main": "require.js",
+  "browserslist": [
+    "chrome 5",
+    "firefox 4.0",
+    "ie 9",
+    "safari 5.1",
+    "opera 11.60",
+    "and_chr 18",
+    "and_ff 4"
+  ],
+}
