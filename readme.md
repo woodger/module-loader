@@ -17,17 +17,49 @@ npm i git+https://git@github.com/woodger/module-loader.git
 
 #### Table of Contents
 
-* [window.require](#windowrequirepath)
+* [Entry Point](#entry-point)
+* [window.require(urls, callback)](#windowrequireurls-callback)
 * [window.require.cache](#windowrequirecache)
 
+#### Entry Point
+
+The data-main attribute is a special attribute that `Module loader` will check to start script loading:
+
+```html
+<script data-main="scripts/index.js" src="/node_modules/module-loader/require.js"></script>
+```
+
+You will typically use a data-main script to await [DOMContentLoaded](https://developer.mozilla.org/en-US/docs/Web/API/Window/DOMContentLoaded_event) options and then load the first application module.
+
+```js
+(function() {
+  document.addEventListener("DOMContentLoaded", function() {
+    var head = document.getElementsByTagName("head").item(0);
+
+    if (!head) {
+      throw new Error("Expected to find a HEAD tag in document");
+    }
+
+    var script = document.createElement("script");
+    script.setAttribute("src", "/node_modules/module-loader/require.js");
+    script.setAttribute("data-main", "/scripts/index.js");
+
+    head.appendChild(script);
+  });
+})();
+```
+
 #### window.require(urls, callback)
+
+- `urls` <[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)> A case-sensitive string representing the paths for module.
+- `callback` <[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function)> a function to execute after the module is loaded.
 
 This method takes a different approach to script loading than traditional <[script](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)> tags.
 The result of the function call is cached by listing a simple object in the [window.require.cache](#windowrequirepathcache) field.
 
-Below `index.js` uses the foo module, which imports the `Foo` class:
+Below `scripts/index.js` uses the foo module, which imports the `Foo` class:
 
-**/index.js**
+**/scripts/index.js**
 
 ```js
 window.require(['/libs/foo'], function(foo) {
@@ -35,9 +67,9 @@ window.require(['/libs/foo'], function(foo) {
 });
 ```
 
-The counter module is defined in `/libs/foo.js`:
+The counter module is defined in `/scripts/libs/foo.js`:
 
-**/libs/foo.js**
+**/scripts/libs/foo.js**
 
 ```js
 module.exports = function() {
