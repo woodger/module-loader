@@ -1,6 +1,6 @@
 {
   "name": "module-loader",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Simple and fast module loader for browser",
   "keywords": [
     "browser",

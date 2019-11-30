@@ -6,8 +6,9 @@
     var script = scripts.item(i);
 
     if (script && script.hasAttribute('data-main')) {
-      var main = script.getAttribute('data-main');
-      return require([ main ]);
+      return require(
+        script.getAttribute('data-main')
+      );
     }
   }
 
@@ -58,8 +59,8 @@
   };
 
   var require = function(urls, callback) {
-    if (urls instanceof Array === false) {
-      throw new Error('The first argument must be an array of URLs.');
+    if (typeof urls === 'string') {
+      urls = [ urls ];
     }
 
     queue([], callback);
@@ -70,7 +71,7 @@
 
         if (buffer.length === urls.length) {
           if (typeof callback === 'function') {
-            callback(buffer);
+            callback.apply(undefined, buffer);
           }
 
           return;
