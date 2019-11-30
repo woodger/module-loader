@@ -42,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 ```
 
+With a `,` can specify multiple entry points by separate them.
+
 #### window.require(urls, callback)
 
 - `urls` <[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)> A case-sensitive string representing the paths for module.
@@ -50,12 +52,12 @@ document.addEventListener('DOMContentLoaded', function() {
 This method takes a different approach to script loading than traditional <[script](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)> tags.
 The result of the function call is cached by listing a simple object in the [window.require.cache](#windowrequirepathcache) field.
 
-Below `/index.js` uses the foo module, which imports the `Foo` class:
+Below `/index.js` uses the foo module, which imports the `foo` function:
 
 **/index.js**
 
 ```js
-window.require('/libs/foo', function(foo) {
+require('/libs/foo', function(foo) {
   console.log(foo());
 });
 ```

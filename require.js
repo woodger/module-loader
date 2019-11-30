@@ -1,60 +1,52 @@
 (function(require) {
   window.require = require;
+
   var scripts = document.getElementsByTagName('script');
 
   for (var i = 0; i < scripts.length; i++) {
     var script = scripts.item(i);
 
     if (script && script.hasAttribute('data-main')) {
-      return require(
-        script.getAttribute('data-main')
-      );
+      var data = script.getAttribute('data-main');
+      var main = data.split(/\s*,\s*/);
+
+      while ((url = main.shift())) {
+        require(url);
+      }
     }
   }
-
-  throw new Error('Not found [data-main] entry point');
 })((function() {
   var cache = {};
+  var pending = {};
 
-  var uploadScript = function (url, callback) {
+  var uploadScript = function(url, callback) {
     if (url in cache) {
       return callback(cache[url]);
     }
 
-    var script = document.createElement('script');
-    var module = {};
-    var exports = {};
+    if (pending[url] instanceof Array) {
+      return pending[url].push(callback);
+    }
 
-    var readymodule = new Event('readymodule');
+    pending[url] = [ callback ];
+    window.module = {};
 
     Object.defineProperty(module, 'exports', {
       set: function(value) {
-        exports = value;
-        script.dispatchEvent(readymodule);
-      },
-      get: function() {
-        return exports;
+        cache[url] = value;
+
+        while ((callback = pending[url].shift())) {
+          callback(value);
+        }
+
+        delete pending[url];
       }
     });
 
-    window.module = module;
-
-    var listener = function(event) {
-      script.removeEventListener('readymodule', listener, false);
-      callback(
-        cache[url] = module
-      );
-    };
+    var head = document.getElementsByTagName('head').item(0);
+    var script = document.createElement('script');
 
     script.setAttribute('src', url);
-    script.addEventListener('readymodule', listener, false);
-
-    var head = document.getElementsByTagName('head').item(0);
-
-    if (!head) {
-      throw new Error('Expected to find a HEAD tag in document');
-    }
-
     head.appendChild(script);
   };
 
@@ -67,7 +59,7 @@
 
     function queue(buffer, callback) {
       uploadScript(urls[buffer.length], function(module) {
-        buffer.push(module.exports);
+        buffer.push(module);
 
         if (buffer.length === urls.length) {
           if (typeof callback === 'function') {
@@ -83,5 +75,6 @@
   };
 
   require.cache = cache;
+
   return require;
 })());
