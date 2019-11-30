@@ -57,7 +57,7 @@ Below `/index.js` uses the foo module, which imports the `foo` function:
 **/index.js**
 
 ```js
-require('/libs/foo', function(foo) {
+require('/libs/foo.js', function(foo) {
   console.log(foo());
 });
 ```

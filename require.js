@@ -2,6 +2,7 @@
   window.require = require;
 
   var scripts = document.getElementsByTagName('script');
+  var main;
 
   for (var i = 0; i < scripts.length; i++) {
     var script = scripts.item(i);
@@ -10,8 +11,8 @@
       var data = script.getAttribute('data-main');
       var main = data.split(/\s*,\s*/);
 
-      while ((url = main.shift())) {
-        require(url);
+      while (main.length) {
+        require(main.shift());
       }
     }
   }
@@ -35,7 +36,8 @@
       set: function(value) {
         cache[url] = value;
 
-        while ((callback = pending[url].shift())) {
+        while (pending[url].length) {
+          var callback = pending[url].shift();
           callback(value);
         }
 
